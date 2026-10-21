@@ -1,0 +1,15 @@
+{
+  "name": "gdwrite",
+  "version": "0.2.0",
+  "description": "Write GDevelop 5 project files (scene, sprites, text, behaviors, sounds, JavaScript events) from code, with no editor.",
+  "type": "module",
+  "main": "gdwrite.mjs",
+  "scripts": {
+    "test": "node --test test_gdwrite.mjs"
+  },
+  "author": "MV2 of Munim, Inc. <mv2@munimtech.com>",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=18"
+  }
+}
