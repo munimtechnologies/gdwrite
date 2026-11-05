@@ -1,4 +1,4 @@
-# gdwrite 0.2.0
+# gdwrite 0.3.0 (pre-release)
 
 Write GDevelop 5 project files from code, with no editor open: one scene, Sprite and Text objects,
 GDevelop's built-in behaviors (such as the platformer ones), instances, image and sound resources and
@@ -9,8 +9,38 @@ Licence: Apache-2.0 (see LICENSE). By MV2 of Munim, Inc. (mv2@munimtech.com). Th
 this README were written by AI agents (Anthropic Claude) working for MV2, then tested and revised by
 the agents in an automated sandbox. gdwrite is not made by or affiliated with the GDevelop team.
 
-The same version is a download (gdwrite-0.2.0.zip) on https://munimv2.itch.io/jamshell, published
+Version 0.2.0 is also a download (gdwrite-0.2.0.zip) on https://munimv2.itch.io/jamshell, published
 on 2026-10-18.
+
+## New in 0.3.0 (added 2026-11-05; first sandbox check pending)
+
+- `pixelart.mjs`: sprites from text grids. `gridPNG(rows, palette, { scale })` turns rows of
+  characters into a PNG (one character per pixel, `.` transparent, an unknown character throws),
+  `sheetPNG(frames, ...)` lays equal-size frames side by side, `outline(rows, ch)` rings the opaque
+  pixels with a 1-pixel outline.
+- `tune.mjs`: `tuneWAV({ bpm, voices })` mixes note lists (MIDI numbers and beats; `null` is a rest;
+  sine, square, triangle or saw) into a WAV loop with click-free note edges; `noiseWAV()` makes a
+  seeded, decaying noise burst for hits and steps.
+- `harness/export.mjs`: exports a project for the web without the editor (needs `gdcore-tools`).
+- `harness/play.mjs`: plays an exported build in headless Chromium (needs `playwright`) from a JSON
+  script of steps (wait, click, tap, drag, key down / up / press / hold, `eval` with `expect`,
+  `wait_for`, screenshots, repeat) and writes a JSON report. It exits 0 only if the page made a
+  canvas, threw no page error and every check passed. `harness/expect.mjs` holds the comparison
+  (`eq`, `ne`, `gt`, `gte`, `lt`, `lte`, `between`, `truthy`, `includes`).
+- `build-artprobe.mjs` and `steps/*.json`: probe scenes and their scripts (`steps/negative.json`
+  must fail, to show the harness reports failures).
+
+```
+npm install gdcore-tools@2.0.0-gd-v5.6.269-autobuild playwright@1.47.0
+npx playwright install --with-deps chromium
+node build-demo.mjs demo breakout.json platformer.json
+node harness/export.mjs demo/game.json build-demo
+node harness/play.mjs build-demo steps/demo.json out
+```
+
+Status: these files were written on 2026-11-05 and their first sandbox run (unit tests, the three
+probe scenes exported and played, and the negative script) had not finished when they were
+committed. The v0.3.0 release is tagged only after that run passes; until then treat them as untested.
 
 ## How it works
 
@@ -51,13 +81,15 @@ has, so a misspelt setting fails when the project is written, not later in the e
 behavior shared data is filled in for you. A sound is played from a JavaScript event with
 `gdjs.evtTools.sound.playSound(runtimeScene, "blip.wav", false, 60, 1)`.
 
-Two complete examples:
+Complete examples:
 
 - `node build-demo.mjs <out dir> <example.json> [...]`: a player moved with the arrow keys, coins
   spawned at runtime, collisions and a score display.
 - `node build-platformer.mjs <out dir> <example.json> [...]` (needs an example with the platformer
   behaviors, such as GDevelop's "platformer"): a player with the Platformer character behavior on a
   stretched ground with the Platform behavior, GDevelop's default controls, and a blip on landing.
+- `node build-artprobe.mjs <out dir> <example.json> [...]` (0.3.0): a pixelart sprite drawn at 4x,
+  a tune.mjs music loop and a noise hit sound.
 
 The example projects are not included; get them from
 https://github.com/GDevelopApp/GDevelop-examples (`examples/breakout/breakout.json` and
@@ -65,19 +97,20 @@ https://github.com/GDevelopApp/GDevelop-examples (`examples/breakout/breakout.js
 
 ## What was tested
 
-- `node --test test_gdwrite.mjs` (or `npm test`): 16 unit tests (PNG and WAV encoding, template
-  loading, objects, behaviors, shared data, sounds, instances, project).
-- In an automated sandbox on 2026-10-18 (Node 20), all 16 tests passed on these files, both from the
-  source folder and again from a clean unzip of gdwrite-0.2.0.zip. Both example scenes, built with
-  templates from GDevelop's breakout and platformer examples, were exported for the web with
-  gdcore-tools 2.0.0-gd-v5.6.269-autobuild and played in headless Chromium with no page errors. Coin
-  demo: images loaded, coins spawned, the arrow keys moved the player and a coin was collected.
+- 0.2.0: `node --test test_gdwrite.mjs` (or `npm test`): 16 unit tests (PNG and WAV encoding,
+  template loading, objects, behaviors, shared data, sounds, instances, project).
+- 0.2.0: in an automated sandbox on 2026-10-18 (Node 20), all 16 tests passed on these files, both
+  from the source folder and again from a clean unzip of gdwrite-0.2.0.zip. Both example scenes,
+  built with templates from GDevelop's breakout and platformer examples, were exported for the web
+  with gdcore-tools 2.0.0-gd-v5.6.269-autobuild and played in headless Chromium with no page errors.
+  Coin demo: images loaded, coins spawned, the arrow keys moved the player and a coin was collected.
   Platformer demo: the player fell onto the stretched ground and stopped on it, walked with the Right
   arrow, jumped with Space and landed again, and the blip sound was loaded by the page and played
   without an error. The project built from the clean unzip matched the tested one byte for byte.
 - gdwrite 0.1.0 output also opened in the GDevelop 5.6.284 desktop editor with no warning.
+- 0.3.0 files: see the status note above.
 - The step that committed these files to GitHub does not run Node, so the tests were not re-run at
-  commit time; run `npm test` to check them yourself.
+  commit time; run `npm test` (and `node --test test_art.mjs harness/test_expect.mjs`) yourself.
 
 ## Limits
 
@@ -94,4 +127,6 @@ https://github.com/GDevelopApp/GDevelop-examples (`examples/breakout/breakout.js
 Other people have built tools for working with GDevelop projects from code, among them GDevelop's
 own command-line tools, gdcore-tools / gdexporter (exporting without the editor, used in the tests
 above) and MCP bridges that let AI assistants edit GDevelop projects. gdwrite is a small, dependency-free
-alternative for writing a project file from scratch; it is not the first tool of its kind.
+alternative for writing a project file from scratch; it is not the first tool of its kind. Headless
+play-test scripts for browser games are common too (Playwright itself, and many game test runners);
+`harness/play.mjs` is a small one tailored to exported GDevelop builds.

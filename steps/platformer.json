@@ -1,0 +1,25 @@
+{
+  "viewport": {"width": 800, "height": 600},
+  "boot_ms": 8000,
+  "steps": [
+    {"wait_for": "window.__gdprobe && window.__gdprobe.onFloor === true", "timeout_ms": 20000},
+    {"eval": "window.__gdprobe.hasBehavior", "expect": true},
+    {"eval": "[window.__gdprobe.gw, window.__gdprobe.gh]", "expect": [640, 32]},
+    {"eval": "Math.abs(window.__gdprobe.landY - (window.__gdprobe.gy - window.__gdprobe.ph)) <= 2", "expect": true},
+    {"shot": "landed"},
+    {"click": [400, 300]},
+    {"eval": "window.__gdprobe.px", "save": "x_landed"},
+    {"hold": "ArrowRight", "ms": 1200},
+    {"wait": 800},
+    {"eval": "window.__gdprobe.px", "save": "x_walked", "expect": {"gt": 150}},
+    {"press": "Space", "ms": 250},
+    {"wait": 2000},
+    {"eval": "window.__gdprobe.jumps", "expect": {"gte": 1}},
+    {"eval": "window.__gdprobe.maxRise", "expect": {"gt": 20}},
+    {"eval": "window.__gdprobe.onFloor", "expect": true},
+    {"eval": "window.__gdprobe.soundCalls", "expect": {"gte": 1}},
+    {"eval": "window.__gdprobe.soundErr", "expect": null},
+    {"eval": "window.__gdprobe.errors.length", "expect": 0},
+    {"shot": "jumped"}
+  ]
+}

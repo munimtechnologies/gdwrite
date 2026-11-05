@@ -1,0 +1,18 @@
+{
+  "viewport": {"width": 800, "height": 600},
+  "boot_ms": 8000,
+  "steps": [
+    {"wait_for": "window.__gdprobe && window.__gdprobe.frames > 30", "timeout_ms": 20000},
+    {"shot": "boot"},
+    {"click": [400, 300]},
+    {"eval": "window.__gdprobe.px", "save": "x_before", "expect": 40},
+    {"eval": "[window.__gdprobe.pw, window.__gdprobe.ph, window.__gdprobe.cw, window.__gdprobe.ch]", "expect": [32, 32, 16, 16]},
+    {"hold": "ArrowRight", "ms": 2500},
+    {"wait": 500},
+    {"eval": "window.__gdprobe.px", "save": "x_after", "expect": {"gt": 200}},
+    {"eval": "window.__gdprobe.score", "expect": {"gte": 1}},
+    {"eval": "window.__gdprobe.spawned", "expect": {"gte": 2}},
+    {"eval": "window.__gdprobe.errors.length", "expect": 0},
+    {"shot": "after"}
+  ]
+}

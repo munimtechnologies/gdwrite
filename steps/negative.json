@@ -1,0 +1,9 @@
+{
+  "viewport": {"width": 800, "height": 600},
+  "boot_ms": 6000,
+  "steps": [
+    {"eval": "window.__gdprobe.score", "expect": {"gte": 999}},
+    {"wait_for": "window.__gdprobe.score > 999", "timeout_ms": 1500},
+    {"eval": "window.no_such_thing.x", "expect": 1}
+  ]
+}

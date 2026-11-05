@@ -1,0 +1,12 @@
+{
+  "viewport": {"width": 800, "height": 600},
+  "boot_ms": 6000,
+  "steps": [
+    {"click": [400, 300]},
+    {"wait_for": "window.__gdprobe && window.__gdprobe.hits >= 2", "timeout_ms": 15000},
+    {"eval": "[window.__gdprobe.pw, window.__gdprobe.ph]", "expect": [64, 64]},
+    {"eval": "window.__gdprobe.music", "expect": 1},
+    {"eval": "window.__gdprobe.errors.length", "expect": 0},
+    {"shot": "probe"}
+  ]
+}
