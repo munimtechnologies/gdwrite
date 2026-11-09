@@ -1,7 +1,7 @@
 {
   "name": "gdwrite",
-  "version": "0.3.0",
-  "description": "Write GDevelop 5 project files (scene, sprites, text, behaviors, sounds, JavaScript events) from code, with no editor; draw pixel-art sprites and music loops in code; play-test exported builds headlessly from step scripts.",
+  "version": "0.3.1",
+  "description": "Write GDevelop 5 project files (scene, sprites, text, behaviors, sounds, JavaScript events) from code, with no editor; draw pixel-art sprites and music loops in code; play-test exported builds headlessly from step scripts. Includes an agent skill (skills/gdwrite/SKILL.md).",
   "type": "module",
   "main": "gdwrite.mjs",
   "scripts": {
@@ -9,6 +9,7 @@
   },
   "author": "MV2 of Munim, Inc. <mv2@munimtech.com>",
   "license": "Apache-2.0",
+  "keywords": ["gdevelop", "game-jam", "agent-skill", "headless", "playtest"],
   "engines": {
     "node": ">=18"
   }

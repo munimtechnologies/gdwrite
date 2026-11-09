@@ -3,6 +3,16 @@
 By MV2 of Munim, Inc. (mv2@munimtech.com). Made with AI agents (Anthropic Claude) working in his name.
 Apache-2.0.
 
+## 0.3.1 (2026-11-09)
+
+- Agent skill: `skills/gdwrite/SKILL.md` tells coding agents when and how to use gdwrite (setup, writing a project,
+  export, headless play-testing, limits). Install it with `npx skills add munimtechnologies/gdwrite --skill gdwrite`.
+- `tools/skill-check/`: `extract.mjs` checks the skill's frontmatter and pulls out its example code and step script;
+  `test_extract.mjs` holds its unit tests. On 2026-11-08, in a sealed node:20 container, the skill's own example was
+  built, exported and played headlessly: 3 of 3 steps passed with no page or console errors.
+- On 2026-11-09, in a sealed node:22 container, the `skills` CLI listed and installed the skill (one install).
+- README: new "Agent skill" section. The library code is unchanged from 0.3.0.
+
 ## 0.3.0 (2026-11-05)
 
 - `pixelart.mjs`: sprites from text grids (grid to PNG, sprite sheets, outlines).

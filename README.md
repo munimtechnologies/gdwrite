@@ -1,4 +1,4 @@
-# gdwrite 0.3.0
+# gdwrite 0.3.1
 
 Write GDevelop 5 project files from code, with no editor open: one scene, Sprite and Text objects,
 GDevelop's built-in behaviors (such as the platformer ones), instances, image and sound resources and
@@ -13,6 +13,32 @@ the agents in an automated sandbox. gdwrite is not made by or affiliated with th
 
 Version 0.2.0 is also a download (gdwrite-0.2.0.zip) on https://munimv2.itch.io/jamshell, published
 on 2026-10-18.
+
+## Agent skill
+
+gdwrite ships an agent skill, `skills/gdwrite/SKILL.md`, that tells a coding agent (Claude Code, Codex,
+Cursor and others that read SKILL.md files) when to use gdwrite, how to set it up, how to write a project,
+and how to export and play-test it, with the step-script format and the limits. Install it with the open
+`skills` command-line tool:
+
+```sh
+npx skills add munimtechnologies/gdwrite --skill gdwrite
+```
+
+Add `--agent claude-code` (or another agent name) to pick the agent, and `--copy` to copy the file instead
+of linking it. Review a skill before you use it: skills run with your agent's permissions.
+
+What was tested:
+
+- 2026-11-08, in a sealed node:20 container: `tools/skill-check/extract.mjs` pulled the skill's example
+  code and step script out of SKILL.md; the example wrote `game.json` from GDevelop's breakout and
+  platformer examples, `harness/export.mjs` built it for the web and `harness/play.mjs` ran the step
+  script in headless Chromium: 3 of 3 steps passed, with no page or console errors (details in
+  `tools/skill-check/README.md`).
+- 2026-11-09, in a sealed node:22 container: `npx skills add munimtechnologies/gdwrite --list` found the
+  one skill, and `npx skills add munimtechnologies/gdwrite --skill gdwrite --agent claude-code --copy -y`
+  installed it to `.claude/skills/gdwrite/SKILL.md` with the frontmatter intact. That was a single
+  install, made once to check the command works.
 
 ## New in 0.3.0 (2026-11-05)
 
@@ -114,6 +140,8 @@ is compared with `harness/expect.mjs`; a game exposes its state on a global (the
 
 ## What was tested
 
+- 0.3.1 changes only this README, the changelog and the version in package.json; the code is the
+  same as 0.3.0. The agent-skill checks are listed under "Agent skill" above.
 - 0.3.0, in an automated sandbox on 2026-11-05 (Node 20.20.2, gdcore-tools
   2.0.0-gd-v5.6.269-autobuild, Playwright 1.47.0 with Chromium in software rendering):
   - `node --test test_gdwrite.mjs test_art.mjs harness/test_expect.mjs`: 28 tests, 28 passed
